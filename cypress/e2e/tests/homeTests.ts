@@ -25,13 +25,11 @@ describe('Github Page',() => {
         })
 
         it('verify whether Sign Up is functional',() => {
-            const welcomeMessage = 'Welcome to GitHub!'
-            const emailId = 'abc@gmail.com'
             HomePage.visitGithubLoginPage()
             HomePage.mainMenuButton().click()
             HomePage.globalNavigation('Sign up').click({force:true})
             cy.url().should('include','/signup')
-            HomePage.verifyIfGithubPageDisplays(welcomeMessage).should('be.visible')
+            HomePage.verifyIfGithubPageDisplays('Welcome to GitHub!').should('be.visible')
         })
     })
 })
