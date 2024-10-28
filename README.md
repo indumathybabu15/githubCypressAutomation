@@ -1,5 +1,5 @@
 # githubCypressAutomation
-Automation of Github page using Cypress framework
+
 This repository demonstrates how to set up automated testing using Cypress and TypeScript for testing basic functionality on a web page. It includes tests for the visibility of the GitHub logo, checking the functionality of the "Sign up" button, and verifying that navigation links (like "Explore" and "Pricing") redirect to the correct pages.
 
 Table of Contents
