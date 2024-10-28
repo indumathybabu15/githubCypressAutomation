@@ -1,139 +1,56 @@
-# githubCypressAutomation
+# Cypress & TypeScript Test Automation
 
-This repository demonstrates how to set up automated testing using Cypress and TypeScript for testing basic functionality on a web page. It includes tests for the visibility of the GitHub logo, checking the functionality of the "Sign up" button, and verifying that navigation links (like "Explore" and "Pricing") redirect to the correct pages.
+This repository demonstrates how to set up automated testing using **Cypress** and **TypeScript**. The tests cover basic functionality on a web page, including verifying that the GitHub logo is visible, checking the "Sign Up" button, and ensuring that navigation links redirect to the correct pages.
 
-Table of Contents
-Repository Setup
-Basic Test Automation
-Test Execution
-Running Tests
-CI/CD Integration
-Repository Setup
-1. Create a New GitHub Repository
-Sign in to GitHub and create a new repository.
-Clone the repository to your local machine.
-2. Install Cypress and TypeScript
-Run the following commands to initialize your project and install Cypress with TypeScript:
+## Table of Contents
+1. [Repository Setup](#repository-setup)
+2. [Test Automation](#test-automation)
+3. [Test Execution](#test-execution)
+4. [CI/CD Integration](#cicd-integration)
 
-bash
-Copy code
-npm init -y
-npm install cypress typescript ts-node @types/node @types/cypress --save-dev
-3. Set Up TypeScript for Cypress
-Create a tsconfig.json file to configure TypeScript for Cypress:
+---
 
-json
-Copy code
-{
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "dom"],
-    "types": ["cypress"]
-  },
-  "include": ["**/*.ts"]
-}
-4. Add Cypress and TypeScript Configuration
-Inside your cypress folder, create a support/commands.ts file and add any global custom Cypress commands you may need. In cypress/plugins/index.ts, initialize TypeScript support.
+## Repository Setup
 
-Basic Test Automation
-This repository includes basic tests that verify the following:
+1. Make sure npm installed
+2. Clone the repository
+3. Run "npm install"
 
-1. Verify GitHub Logo Visibility
-A test to check that the GitHub logo is visible on the page:
+## Test Automation
+1. Folder Structure
 
-typescript
-Copy code
-describe('GitHub Logo Test', () => {
-  it('should verify that the GitHub logo is visible', () => {
-    cy.visit('https://github.com');
-    cy.get('img[alt="GitHub"]').should('be.visible');
-  });
-});
-2. Test "Sign Up" Button Functionality
-A test to verify that the "Sign up" button leads to the appropriate sign-up page:
+   ![image](https://github.com/user-attachments/assets/7037dd52-eefe-4e56-8d2f-84c5b71c91f9)
 
-typescript
-Copy code
-describe('Sign Up Button Test', () => {
-  it('should verify the functionality of the "Sign up" button', () => {
-    cy.visit('https://github.com');
-    cy.get('a[href="/signup"]').click();
-    cy.url().should('include', '/signup');
-  });
-});
-3. Test Navigation Links
-Tests that ensure navigation links like "Explore" and "Pricing" redirect to the correct pages:
+## Test Execution
 
-typescript
-Copy code
-describe('Navigation Links Test', () => {
-  it('should navigate to the Explore page', () => {
-    cy.visit('https://github.com');
-    cy.get('a[href="/explore"]').click();
-    cy.url().should('include', '/explore');
-  });
+Cypress has two main modes: an interactive mode which has a point-and-click GUI, helpful visualizations of test runs, the ability to walk forward and backward through a previously run test, and other handy things. The other mode is a CLI mode very much like a unit testing framework like Jest or Mocha.
 
-  it('should navigate to the Pricing page', () => {
-    cy.visit('https://github.com');
-    cy.get('a[href="/pricing"]').click();
-    cy.url().should('include', '/pricing');
-  });
-});
-Test Execution
-Add a Script in package.json
-In your package.json file, add the following script to run Cypress headlessly:
+**Run tests in interactive mode**
 
-json
-Copy code
-{
-  "scripts": {
-    "test": "cypress run"
-  }
-}
-Running Tests Headlessly
-To run the tests headlessly with output suitable for CI/CD pipelines, simply run the following command:
+Open your terminal and run npx cypress open; this will open the Cypress interactive test runner.
+Select the feature file you wish to run, or click "Run all specs" to execute all test feature files.
+If you want to run just a single scenario from a test feature file, add the tag "@focus" to the test scenario in the feature file.
+Confirm the test url or environment variable from the file "cypress.env.json" or override it in the CLI with npx cypress open -e fixture=your_target_environment_here
 
-bash
-Copy code
-npm test
-This will execute the Cypress tests in headless mode, which is useful for automation in CI/CD pipelines.
+**Run all tests in CLI mode**
 
-CI/CD Integration
-You can integrate this test suite into any CI/CD pipeline. For GitHub Actions, you can add a workflow file like the one below to automatically run tests on each push to the repository.
+Open terminal and run "npx cypress run"
+Use "-e host, fixture" to overwrite the test url and test data location defined in the "cypress.env.json" file. If you don't specify a host and only specify a fixture file, it will use the default host, e.g. npx cypress run -e fixture=release.
 
-Example GitHub Actions Workflow (.github/workflows/cypress.yml):
-yaml
-Copy code
-name: Run Cypress Tests
+**Run specific files or folders in CLI mode**
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+You can also pass the location of test file or folder in the CLI to run only those tests, e.g. npx cypress run -s 'cypress/integration/learner/personalization/feed.feature' or npx cypress run -s 'cypress/integration/learner/personalization/\*'
 
-jobs:
-  cypress-run:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+## CI/CD Integration
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+**Set up CI Pipeline with GitHub Actions**
+To automatically run tests on each push to your repository using GitHub Actions, follow the steps below:
+1. Create a Workflow Configuration File:
+      Inside your repository, create a directory called .github/workflows/.
+      Inside this folder, create a YAML file, e.g., ci.yml and Define Your GitHub Actions Workflow
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Cypress tests
-        run: npm test
-CI/CD Pipeline for Other Platforms
-For other CI/CD platforms such as CircleCI or Jenkins, similar configurations can be made by setting up Node.js, installing the project dependencies, and running Cypress headlessly with npm test.
-
-Conclusion
-This repository demonstrates the setup of Cypress with TypeScript for automated testing of key functionality on a website, such as verifying the GitHub logo, "Sign Up" button, and navigation links. With these tests, and the provided script, tests can be run locally or integrated into any CI/CD pipeline for continuous testing.
+**Running Tests Automatically**
+Once the workflow is set up, GitHub Actions will automatically run your tests:
+Every time code is pushed to the main branch.
+On every pull request targeting the main branch.
+You can monitor the workflow execution in the Actions tab of your GitHub repository, where you will see the status and logs of each test run.
