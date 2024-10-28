@@ -1,4 +1,4 @@
-import { HomePage } from "../../support/pageActions/homePage"
+import { HomePage } from "../../support/pages/homePage"
 
 describe('Github Page',() => {
     context('Home Page',() => {
